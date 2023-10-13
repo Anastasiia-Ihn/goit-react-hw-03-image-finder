@@ -4,6 +4,7 @@ import { Button } from './Button/Button.jsx';
 import { Component } from 'react';
 import { fetchCard } from 'API/api.js';
 import { SpinnerDotted } from 'spinners-react';
+import { Layout } from './Layout';
 
 import toast, { Toaster } from 'react-hot-toast';
 
@@ -71,7 +72,7 @@ export class App extends Component {
   render() {
     const { galleryItems, loader } = this.state;
     return (
-      <>
+      <Layout>
         <Searchbar onSubmit={this.handlerClickOnForm} />
 
         {galleryItems.length > 0 && <ImageGallery arrCards={galleryItems} />}
@@ -89,7 +90,7 @@ export class App extends Component {
           <Button onClick={this.handlerClickOnLoadMore} />
         )}
         <Toaster />
-      </>
+      </Layout>
     );
   }
 }
