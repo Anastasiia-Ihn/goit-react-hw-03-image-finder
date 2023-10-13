@@ -5,6 +5,8 @@ import { Component } from 'react';
 import { fetchCard } from 'API/api.js';
 import { SpinnerDotted } from 'spinners-react';
 
+import toast, { Toaster } from 'react-hot-toast';
+
 const perPage = 12;
 
 export { perPage };
@@ -19,21 +21,36 @@ export class App extends Component {
   };
 
   async componentDidUpdate(_, prevState) {
-    // if (this.state.query.trim === '' || this.state.query === ' ') {
-    //   // return this.setState({galleryItems: []})
-    //   return;
-    // }
-    if (
-      this.state.page !== prevState.page ||
-      this.state.query !== prevState.query
-    ) {
+    const { page, query } = this.state;
+
+    if (query === '' || query === ' ') {
+      // return this.setState({galleryItems: []})
+      return;
+    }
+
+    if (page !== prevState.page || query !== prevState.query) {
+      if (query !== prevState.query) {
+        this.setState({ page: 1, galleryItems: [] });
+      }
+
       try {
-        this.setState({ loader: true, galleryItems: [], page: 1 }); //????????
-        //  запит на API
-        const cards = await fetchCard(this.state.query, this.state.page);
-        this.setState({ galleryItems: cards.data.hits });
+        this.setState({ loader: true });
+
+        const cards = await fetchCard(query, page);
+
+        if (!cards.data.hits.length) {
+          this.setState({ error: true });
+          toast.error('Sorry, not found');
+        }
+
+        this.setState(prevState => {
+          return {
+            galleryItems: [...prevState.galleryItems, ...cards.data.hits],
+          };
+        });
       } catch (error) {
-        console.log(error);
+        this.setState({ error: true });
+        toast.error('Not found');
       } finally {
         this.setState({ loader: false });
       }
@@ -43,13 +60,12 @@ export class App extends Component {
   handlerClickOnForm = evt => {
     evt.preventDefault(); //відміна перезагру сторінки
     this.setState({ query: evt.target[1].value }); // те що ввів клієнт
-    // this.setState({ loader: true, galleryItems: [], page: 1 });
+    this.setState({ page: 1 });
   };
 
   handlerClickOnLoadMore = () => {
     this.setState(prevState => {
-      console.log(prevState.page + 1);
-      return prevState.page + 1;
+      return { page: prevState.page + 1 };
     });
   };
 
@@ -73,6 +89,7 @@ export class App extends Component {
         {galleryItems.length >= perPage && (
           <Button onClick={this.handlerClickOnLoadMore} />
         )}
+        <Toaster />
       </>
     );
   }
