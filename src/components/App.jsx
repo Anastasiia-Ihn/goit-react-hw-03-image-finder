@@ -23,14 +23,13 @@ export class App extends Component {
   async componentDidUpdate(_, prevState) {
     const { page, query } = this.state;
 
-    if (query === '' || query === ' ') {
-      // return this.setState({galleryItems: []})
-      return;
-    }
-
     if (page !== prevState.page || query !== prevState.query) {
       if (query !== prevState.query) {
         this.setState({ page: 1, galleryItems: [] });
+      }
+
+      if (query === '' || query === ' ') {
+        return this.setState({ galleryItems: [] });
       }
 
       try {
