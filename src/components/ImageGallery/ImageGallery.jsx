@@ -13,6 +13,5 @@ export const ImageGallery = ({arrCards} ) => {
       </ImageGalleryItem>  
 ))}
   </List>
-    {/* 
-  <Modal></Modal> </>; */}
+    
 };

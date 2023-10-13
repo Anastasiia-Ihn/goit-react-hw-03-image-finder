@@ -4,6 +4,7 @@ import { Button } from './Button/Button.jsx';
 import { Loader } from './Loader/Loader.jsx';
 import { Component } from 'react';
 import { fetchCard } from 'API/api.js';
+import { SpinnerDotted } from 'spinners-react';
 
 const perPage = 12;
 
@@ -20,7 +21,8 @@ export class App extends Component {
 
   async componentDidUpdate(_, prevState) {
     if (this.state.query === '' || this.state.query === ' ') {
-      return //??????
+      // return this.setState({galleryItems: []})
+      return
     }
       if (
         this.state.page !== prevState.page ||
@@ -31,6 +33,7 @@ export class App extends Component {
         
         // }
         try {
+          this.setState({ loader:true })
           //  запит на API
           const cards = await fetchCard(this.state.query);
           this.setState({ galleryItems: cards.data.hits });
@@ -57,7 +60,7 @@ export class App extends Component {
         <Searchbar onSubmit={this.handlerClickOnForm} />
         {/* {this.state.galleryItems.length > 0 && <ImageGallery arrCards={this.state.galleryItems } />} */}
         <ImageGallery arrCards={this.state.galleryItems} />
-        <Loader />
+        { this.state.loader && <SpinnerDotted size={50} thickness={100} speed={100} color="#36ad47" /> }
         <Button />
       </>
     );

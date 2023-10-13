@@ -1,11 +1,33 @@
-import { Overlay, ModalCard } from './Modal.js';
+import {  ModalImg } from './Modal.js';
+import Modal from 'react-modal';
 
-export const Modal = ({data}) => {
+const customStyles = {
+  content: {
+    top: '50%',
+    left: '50%',
+    right: 'auto',
+    bottom: 'auto',
+    marginRight: '-50%',
+    transform: 'translate(-50%, -50%)',
+    maxWidth: 'calc(100vw - 72px)',
+  maxHeight: 'calc(100vh - 144px)',
+  },
+};
+
+Modal.setAppElement('#root');
+
+
+export const ModalEl = ({onRequestClose,isOpen, data,}) => {
   return (
-    <Overlay>
-      <ModalCard>
-        <img src={data.largeImageURL } alt={data.id} />
-      </ModalCard>
-    </Overlay>
+    
+    <Modal
+    isOpen={isOpen}
+    onRequestClose={onRequestClose}
+    style={customStyles}
+    contentLabel="Large Image"
+    >
+        <ModalImg src={data.largeImageURL } alt={data.id} />
+      </Modal>
+
   );
 };
