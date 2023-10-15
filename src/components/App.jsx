@@ -8,10 +8,6 @@ import { Layout } from './Layout';
 
 import toast, { Toaster } from 'react-hot-toast';
 
-const perPage = 12;
-
-export { perPage };
-
 export class App extends Component {
   state = {
     query: '',
@@ -25,17 +21,9 @@ export class App extends Component {
     const { page, query } = this.state;
 
     if (page !== prevState.page || query !== prevState.query) {
-      if (query !== prevState.query) {
-        this.setState({ page: 1, galleryItems: [] });
-      }
-
-      if (query === '' || query === ' ') {
-        return this.setState({ galleryItems: [] });
-      }
+      this.setState({ loader: true });
 
       try {
-        this.setState({ loader: true });
-
         const cards = await fetchCard(query, page);
 
         if (!cards.data.hits.length) {
@@ -58,9 +46,11 @@ export class App extends Component {
   }
 
   handlerClickOnForm = evt => {
-    evt.preventDefault(); //відміна перезагру сторінки
-    this.setState({ query: evt.target[1].value }); // те що ввів клієнт
-    this.setState({ page: 1 });
+    if (evt.target[1].value === '') {
+      return;
+    }
+    evt.preventDefault();
+    this.setState({ query: evt.target[1].value, page: 1, galleryItems: [] });
   };
 
   handlerClickOnLoadMore = () => {
@@ -86,7 +76,7 @@ export class App extends Component {
           />
         )}
 
-        {galleryItems.length >= perPage && (
+        {galleryItems.length >= 12 && (
           <Button onClick={this.handlerClickOnLoadMore} />
         )}
         <Toaster />

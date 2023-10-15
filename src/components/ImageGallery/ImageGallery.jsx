@@ -1,8 +1,5 @@
-// import { ImageGalleryItem } from './ImageGalleryItem/ImageGalleryItem.jsx';
-// import { Modal } from './Modal/Modal.jsx';
-
 import { ImageGalleryItem } from 'components/ImageGalleryItem/ImageGalleryItem.jsx';
-import { List } from './ImageGallery.js';
+import { List } from './ImageGallery.styled';
 
 export const ImageGallery = ({ arrCards }) => {
   return (

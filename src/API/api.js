@@ -1,5 +1,4 @@
 import axios from 'axios';
-import { perPage } from '../components/App';
 
 const BASE_URL = 'https://pixabay.com/api/';
 
@@ -12,7 +11,7 @@ export const fetchCard = async (valueInput, page) => {
     orientation: 'horizontal',
     safesearch: true,
     page: page,
-    per_page: perPage,
+    per_page: 12,
   });
 
   const resp = await axios.get(`${BASE_URL}?${params}`);
